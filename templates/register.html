@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Book</title>
+    <link rel="stylesheet" href="../static/styles/style.css" >
+</head>
+<body >
+
+    <div id="center_box">
+        <h1>Register</h1>
+        <form action="/register" method="post" name="form_frame">
+            <div>
+            <input type="text" maxlength="20" minlength="5" name="username" placeholder="Enter username">
+            </div>
+            <div>
+            <input type="password" maxlength="20" minlength="5" name="password" placeholder="Enter your password">
+            </div>
+            <div>
+            <a href="/login"> Already have an account ?</a>
+  
+            <button>Register</button>
+            </div>
+            {%if message%}
+            <div id="message">
+                <p>{{message}}</p>
+            </div>
+            {%endif%}
+            
+        </form>
+       </div>
+
+</body>
+</html>

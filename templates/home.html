@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Note Book</title>
+    <link rel="stylesheet" href="../static/styles/style.css" />
+  </head>
+  <body>
+    {% if current_user.is_authenticated %}
+
+    <div id="form_box">
+        <H1>QuickNote</H1>
+      <form id="input_note" action="/" method="post" name="form_frame">
+        <div>
+          <textarea name="note" maxlength="250">Enter a note</textarea>
+        </div>
+        <div>
+          <button>Add Note</button>
+        </div>
+      </form>
+      <a href="/logout" style="position: absolute; top:20px;right: 20px"><button>Logout</button></a>
+    </div>
+    <div id="list_box">
+      <ul>
+        {% for key,note in notes.items() %}
+
+        <li name="{{key}}">
+          <div id="{{key}}">
+            {% for part in note['note'].split('\n') %} {{part}}<br />
+            {%endfor%}
+          </div>
+          <div id="status_bar">
+            <p>{{note['date']}} </p>
+
+
+            <a onclick="editable({{key}})"
+              ><img src="../static/images/magic-wand.png" height="15px"
+            /></a>
+            <a href="/delete/{{key}}"
+              ><img src="../static/images/trash.png" height="15px"
+            /></a>
+          </div>
+        </li>
+
+        {% endfor %}
+      </ul>
+    </div>
+    {%else%}
+    <h1>Welcome to QuickNote!  </h1>
+    <div>
+      <a href="/login"><button>Login</button></a>
+      <a href="/register"><button>Register</button></a>
+    </div>
+    {%endif%}
+    <script>
+      function editable(key){
+          state = document.getElementById(key).contentEditable;
+         
+          
+          if (state == 'true') {
+              document.getElementById(key).parentElement.style.backgroundColor = 'rgba(255,255,255,0.3)';
+              document.getElementById(key).contentEditable = false
+              edited_note = document.getElementById(key).innerText
+              let data = {
+          "id": key,
+          "edited_note": edited_note,
+      }
+      fetch('/edit', {
+          "method": "POST",
+          "headers": {"Content-Type": "application/json"},
+          "body": JSON.stringify(data),
+        });
+        location.reload()
+          
+          }else{
+            document.getElementById(key).contentEditable = true
+            document.getElementById(key).parentElement.style.backgroundColor = 'rgba(255,0,0,0.3)';
+        }
+      }
+      
+    </script>
+  </body>
+</html>
